@@ -1,0 +1,89 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta http-equiv="Content-Security-Policy" content="default-src *; style-src * 'unsafe-inline'; script-src * 'unsafe-inline' 'unsafe-eval'">
+    <script src="components/loader.js"></script>
+    <link rel="stylesheet" href="components/loader.css">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.2/moment.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js" type="text/javascript"></script>
+    
+    <script src="./js/traffic_custom.js"></script>
+    
+    <script>
+        var myApp = ons.bootstrap();
+        var array_areas = [];
+
+        document.addEventListener("deviceready", onDeviceReady, false);
+            
+        function onDeviceReady(){
+            console.log("PhoneGap is ready.");
+            
+        }
+        
+        
+        myApp.controller('mapCtrl', function () {
+            console.log("mapCtrl is ready.");
+            set_map();
+            
+            myNavigator.on('postpop', function(event) {
+                console.log("mapCtrl is postpop.");
+                if(event.leavePage.name == "page_traffic.html"){
+                    console.log("timer stop.");
+                    var pages = myNavigator.getPages();
+                    console.log(pages.length);
+                    
+                    clearInterval(timerID);
+                }
+            });
+        });
+        
+        
+        
+    </script>
+</head>
+<body>
+<ons-navigator var="myNavigator">
+    <ons-page>
+        <ons-toolbar fixed-style="">
+            <div class="left"></div>
+            <div id="view_title" class="center">GPSロガー</div>
+        </ons-toolbar>
+    
+    <div class="description">
+    GPSで現在地を特定します。<br />
+    <!--
+    <div class="marker_div">
+    「ヒヤリ Aランク」
+    <p><img src="./images/letter_a.png" /></p>
+    「ヒヤリ Bランク」
+    <p><img src="./images/letter_b.png" /></p>
+    「ヒヤリ Cランク」
+    <p><img src="./images/letter_c.png" /></p>
+    </div>
+    -->
+    <div style="text-align:center;">
+        <div class="formarea" style="margin-top: 10px;margin-bottom: 30px;">
+            <div class="vspc form-row">
+                <ons-button id="btn_call" modifier="large--cta" onclick="myNavigator.pushPage('page_traffic.html');">
+                現在地を見る        
+                </ons-button>
+            </div>
+        </div>
+    </div>
+    </ons-page>
+</ons-navigator>
+
+<ons-modal var="modal" id="modal">
+    <div id="div_spin">
+        <ons-icon icon="ion-load-c" size="2x" spin="true"></ons-icon>
+    </div>
+    <br>
+    <span id="gps_text"></span>
+</ons-modal>
+
+</body>
+</html>
